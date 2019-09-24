@@ -30,7 +30,7 @@
           <div class="register__submit">
             <button
               class="register__submit__btn"
-              type="submit"
+              type="button"
               name="button"
               @click="(targetTodo.id === null) ? addTodo() : editTodo()"
             >
@@ -113,7 +113,7 @@
 </template>
 
 <script>
-  import axios from 'axios';
+import axios from 'axios';
 
 export default {
   data() {
@@ -141,6 +141,7 @@ export default {
     });
   },
   methods: {
+    // フォームの初期化
     initTargetTodo() {
       return Object.assign({}, {
         id: null,
@@ -149,34 +150,46 @@ export default {
         completed: false,
       });
     },
+    // エラーメッセージの初期化
     hideError() {
       this.errorMessage = '';
     },
+    // エラーメッセージの表示
     showError(err) {
+      console.log(err);
+      console.log(err.response);
       if (err.response) {
         this.errorMessage = err.response.data.message;
       } else {
         this.errorMessage = 'ネットに接続がされていない、もしくはサーバーとの接続がされていません。ご確認ください。';
       }
     },
+    // todoの追加
     addTodo() {
+      // titleとdetailを持ったオブジェクトを作成
       const postTodo = Object.assign({}, {
         title: this.targetTodo.title,
         detail: this.targetTodo.detail,
       });
       console.log(postTodo);
-      axios.post('http://localhost:3000/api/todos/', postTodo).then(({ data }) => {
+      // postTodoをURIにPOSTする(サーバ側でidとcompletedが付与される)
+      axios.post('http://localhost:3000/api/todos/', postTodo).then(({ data }) => { // dataに返ってきてるのは新規のtodoのみ
+        // this.todosの{0}に対して返却されたdataを追加
         this.todos.unshift(data);
+        // フォームの情報初期化
         this.targetTodo = this.initTargetTodo();
+        // エラーメッセージを初期化
         this.errorMessage = '';
       }).catch((err) => {
         this.showError(err);
       });
     },
+    // 完了未完了の操作
     changeCompleted(todo) {
       console.log(Object.assign({}, todo));
       this.targetTodo = this.initTargetTodo();
       const targetTodo = Object.assign({}, todo);
+
       axios.patch(`http://localhost:3000/api/todos/${targetTodo.id}`, {
         completed: !targetTodo.completed,
       }).then(({ data }) => {
@@ -189,9 +202,11 @@ export default {
         this.showError(err);
       });
     },
+    // todoをフォームに表示
     showEditor(todo) {
       this.targetTodo = Object.assign({}, todo);
     },
+    // todoの編集
     editTodo() {
       const targetTodo = this.todos.find(todo => todo.id === this.targetTodo.id);
       if (
@@ -215,6 +230,7 @@ export default {
         this.showError(err);
       });
     },
+    // todoの削除
     deleteTodo(id) {
       this.targetTodo = this.initTargetTodo();
       axios.delete(`http://localhost:3000/api/todos/${id}`).then(({ data }) => {

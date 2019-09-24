@@ -15,8 +15,10 @@ const store = new Vuex.Store({
       detail: '',
       completed: '',
     },
-    errorMessage: 'エラーが起きました。',
-    emptyMessage: 'やることリストは空です。',
+    // errorMessage: 'エラーが起きました。',
+    // emptyMessage: 'やることリストは空です。',
+    errorMessage: '',
+    emptyMessage: '',
   },
   getters: {
     completedTodos: (state) => state.todos.filter((todo) => todo.completed),
@@ -30,11 +32,14 @@ const store = new Vuex.Store({
     },
     setEmptyMessage(state, routeName) {
       if (routeName === 'completedTodos') {
-        let emptyMessage = '完了済みのやることリストはありません。';
+        // let emptyMessage = '完了済みのやることリストはありません。';
+        state.emptyMessage = '完了済みのやることリストはありません。';
       } else if (routeName === 'incompleteTodos') {
-        let emptyMessage = '未完了のやることリストはありません。';
+        // let emptyMessage = '未完了のやることリストはありません。';
+        state.emptyMessage = '未完了のやることリストはありません。';
       } else {
-        let emptyMessage = 'やることリストには何も登録されていません。';
+        // let emptyMessage = 'やることリストには何も登録されていません。';
+        state.emptyMessage = 'やることリストには何も登録されていません。';
       }
     },
     initTargetTodo(state) {
@@ -46,11 +51,13 @@ const store = new Vuex.Store({
       };
     },
     hideError(state) {
-      state.errorMessage = 'エラーが起きました。';
+      // state.errorMessage = 'エラーが起きました。';
+      state.errorMessage = '';
     },
     showError(state, payload) {
       if (payload) {
-        const errorMessage = payload.data;
+        // const errorMessage = payload.data;
+        state.errorMessage = payload.data;
       } else {
         state.errorMessage = 'ネットに接続がされていない、もしくはサーバーとの接続がされていません。ご確認ください。';
       }
@@ -72,6 +79,10 @@ const store = new Vuex.Store({
         if (todoItem.id === payload.id) return payload;
         return todoItem;
       });
+    },
+    // 追加
+    deleteTodo(state, payload) {
+      state.todos = payload.reverse();
     },
   },
   actions: {
@@ -146,10 +157,13 @@ const store = new Vuex.Store({
     deleteTodo({ commit }, todoId) {
       axios.delete(`http://localhost:3000/api/todos/${todoId}`).then(({ data }) => {
         // 処理
+        commit('deleteTodo', data.todos);
       }).catch((err) => {
         // 処理
+        commit('showError', err.response);
       });
       // 必要があれば処理
+      commit('initTargetTodo');
     },
   },
 });
