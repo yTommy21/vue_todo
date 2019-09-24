@@ -18,9 +18,10 @@ export default {
   props: {
     todos: {
       type: Array,
-      default: function() {
-        return [];
-      },
+      // default: function() {
+      //   return [];
+      // },
+      default: () => [],
     },
   },
 };

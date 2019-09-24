@@ -21,8 +21,8 @@ const store = new Vuex.Store({
     emptyMessage: '',
   },
   getters: {
-    completedTodos: (state) => state.todos.filter((todo) => todo.completed),
-    incompleteTodos: (state) => state.todos.filter((todo) => !todo.completed),
+    completedTodos: state => state.todos.filter(todo => todo.completed), // filterは配列にしか使えない 新しい配列を作成する
+    incompleteTodos: state => state.todos.filter(todo => !todo.completed),
     completedTodosLength: (state, getters) => getters.completedTodos.length,
     incompleteTodosLength: (state, getters) => getters.incompleteTodos.length,
   },
@@ -87,7 +87,7 @@ const store = new Vuex.Store({
   },
   actions: {
     setTodoFilter({ commit }, routeName) {
-      commit('setTodoFilter', routeName);
+      commit('setTodoFilter', routeName); // {}でroutenameを囲むだけでオブジェクトになる
     },
     setEmptyMessage({ commit }, routeName) {
       commit('setEmptyMessage', routeName);

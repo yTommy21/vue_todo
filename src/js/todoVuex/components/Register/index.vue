@@ -40,26 +40,27 @@
 <script>
 export default {
   computed: {
-    targetTodo: function() {
+    targetTodo() { // targetTodo: function() {
       return this.$store.state.targetTodo;
     },
     title: {
-      get: function() {
+      get() { // get: function() {
         return this.$store.state.targetTodo.title;
       },
-      set: function(value) {
+      set(value) { // set: function(value) {
         this.$store.dispatch({
           type: 'updateTargetTodo',
           name: 'title',
-          value: value,
+          // value: value,
+          value,
         });
       },
     },
     detail: {
-      get: function() {
+      get() { // get: function() {
         return this.$store.state.targetTodo.detail;
       },
-      set: function(value) {
+      set(value) { // set: function(value) {
         this.$store.dispatch({
           type: 'updateTargetTodo',
           name: 'detail',
@@ -67,16 +68,16 @@ export default {
         });
       },
     },
-    rows: function() {
+    rows() { // rows: function() {
       const num = this.targetTodo.detail.split('\n').length;
       return (num > 3) ? num : 3;
     },
   },
   methods: {
-    addTodo: function() {
+    addTodo() { // addTodo: function() {
       this.$store.dispatch('addTodo');
     },
-    editTodo: function() {
+    editTodo() { // editTodo: function() {
       this.$store.dispatch('editTodo');
     },
   },

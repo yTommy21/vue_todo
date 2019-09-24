@@ -45,20 +45,21 @@ export default {
   props: {
     todo: {
       type: Object,
-      default: function() {
-        return {};
-      },
+      // default: function() {
+      //   return {};
+      // },
+      default: () => {},
     },
   },
   methods: {
-    changeCompleted: function(todo) {
+    changeCompleted(todo) { // changeCompleted: function(todo) {
       this.$store.dispatch('changeCompleted', todo);
     },
-    showEditor: function(todo) {
+    showEditor(todo) { // showEditor: function(todo) {
       this.$store.dispatch('showEditor', todo);
     },
     // 追加
-    deleteTodo: function(todoId) {
+    deleteTodo(todoId) { // deleteTodo: function(todoId) {
       this.$store.dispatch('deleteTodo', todoId);
     },
   },

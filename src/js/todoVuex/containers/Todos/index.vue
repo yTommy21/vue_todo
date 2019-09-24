@@ -32,28 +32,28 @@ export default {
     appNavi: Navi, // 追加
   },
   computed: {
-    todoFilter: function() {
+    todoFilter() { // todoFilter: function() {
       return this.$store.state.todoFilter;
     },
-    todos: function() {
+    todos() { // todos: function() {
       if (this.todoFilter === 'allTodos') {
         return this.$store.state.todos;
       }
       return this.$store.getters[this.todoFilter];
     },
-    errorMessage: function() {
+    errorMessage() { // errorMessage: function() {
       return this.$store.state.errorMessage;
     },
   },
   watch: {
-    todos: function(todos) {
+    todos(todos) { // todos: function(todos) {
       if (!todos.length) this.$store.dispatch('setEmptyMessage', this.todoFilter);
     },
-    $route: function(to) {
+    $route(to) { // $route: function(to) {
       this.$store.dispatch('setTodoFilter', to.name);
     },
   },
-  created: function() {
+  created() { // created: function() {
     this.$store.dispatch('getTodos');
     this.$store.dispatch('setTodoFilter', this.$route.name);
   },
